@@ -1,0 +1,74 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/circleci-demo-ruby-rails
+
+    # Primary container image where all commands run
+
+    docker:
+      - image: circleci/ruby:2.5.3-node
+        environment:
+          RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: root
+
+    # Service container image available at `host: localhost`
+
+      - image: circleci/postgres:9.6.2-alpine
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: circle-test_test
+
+    steps:
+      - checkout
+
+      # Restore bundle cache
+      - restore_cache:
+          keys:
+            - rails-demo-{{ checksum "Gemfile.lock" }}
+            - rails-demo-
+
+      # Bundle install dependencies
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get install cmake python-pip yamllint python3-pkg-resources
+            gem install bundler
+            yarn
+            bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs 4 --retry 3
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      - run: sudo apt install -y postgresql-client || true
+
+      # Store bundle cache
+      - save_cache:
+          key: rails-demo-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: Database Setup
+          command: |
+            bundle exec rake db:create
+
+      - run:
+          name: Run tests
+          command: bin/rails test
+
+      - run:
+          name: Rubocop lint
+          command: |
+            mkdir /tmp/test-results
+            bundle exec rubocop
+
+      - run:
+          name: YAML lint
+          command: yamllint config/locales/
+
+      - run:
+          name: Yarn test && CodeCov
+          command: yarn test && yarn run codecov
+
+      # Save artifacts
+      - store_test_results:
+          path: /tmp/test-results
