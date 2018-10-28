@@ -1,0 +1,62 @@
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+    - "config/boot.rb"
+    - "config/puma.rb"
+    - "config/spring.rb"
+    - "config/initializers/**/*"
+    - "config/environments/**/*"
+    - "db/schema.rb"
+    - "db/seeds.rb"
+    - "db/migrate/**/*"
+    - "node_modules/**/*"
+    - "vendor/**/*"
+    - "lib/fake_flow.rb"
+    - "lib/em_statsd.rb"
+    - "bin/update"
+    - "bin/rake"
+    - "bin/setup"
+    - "bin/bundle"
+    - "bin/spring"
+    - "bin/rails"
+    - "bin/**"
+
+Documentation:
+  Enabled: false
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+Layout/CaseIndentation:
+  EnforcedStyle: end
+Layout/AccessModifierIndentation:
+  EnforcedStyle: outdent
+Layout/FirstParameterIndentation:
+  EnforcedStyle: consistent
+Layout/IndentHash:
+  EnforcedStyle: consistent
+Style/MultilineBlockChain:
+  Enabled: false
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+Style/SymbolArray:
+  EnforcedStyle: brackets
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+Style/WordArray:
+  EnforcedStyle: brackets
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+Metrics/ClassLength:
+  Enabled: false
+Metrics/LineLength:
+  Max: 120
+Metrics/BlockLength:
+  Exclude:
+    - "config/routes.rb"
+Metrics/MethodLength:
+  Max: 15
+Metrics/ModuleLength:
+  Enabled: false
+Style/ParallelAssignment:
+  Enabled: false
