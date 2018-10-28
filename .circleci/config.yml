@@ -1,74 +1,87 @@
+# Ruby CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-ruby/ for more details
+#
 version: 2
 jobs:
   build:
-    working_directory: ~/circleci-demo-ruby-rails
-
-    # Primary container image where all commands run
-
     docker:
-      - image: circleci/ruby:2.5.3-node
+      # specify the version you desire here
+      - image: circleci/ruby:2.5.3-node-browsers
         environment:
-          RAILS_ENV: test
-          PGHOST: 127.0.0.1
-          PGUSER: root
-
-    # Service container image available at `host: localhost`
-
-      - image: circleci/postgres:9.6.2-alpine
+          - PG_HOST=localhost
+          - PG_USER=ubuntu
+          - RAILS_ENV=test
+          - RACK_ENV=test
+      - image: circleci/postgres:9.4
         environment:
-          POSTGRES_USER: root
-          POSTGRES_DB: circle-test_test
+          - POSTGRES_USER=ubuntu
+          - POSTGRES_DB=db_name
+    working_directory: ~/repo
 
     steps:
       - checkout
+      - run:
+          command: "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
 
-      # Restore bundle cache
+      # Download and cache dependencies
       - restore_cache:
           keys:
-            - rails-demo-{{ checksum "Gemfile.lock" }}
-            - rails-demo-
+          - gem-cache-{{ arch }}-{{ checksum "Gemfile.lock" }}
+          # - v1-dependencies-{{ checksum "Gemfile.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          # - v1-dependencies-
 
-      # Bundle install dependencies
       - run:
           name: Install dependencies
           command: |
             sudo apt-get install cmake python-pip yamllint python3-pkg-resources
             gem install bundler
             yarn
-            bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs 4 --retry 3
             bundle install --jobs=4 --retry=3 --path vendor/bundle
 
-      - run: sudo apt install -y postgresql-client || true
-
-      # Store bundle cache
       - save_cache:
-          key: rails-demo-{{ checksum "Gemfile.lock" }}
+          key: gem-cache-{{ arch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+            - ~/.cache/yarn
 
+      # Database setup
       - run:
-          name: Database Setup
-          command: |
-            bundle exec rake db:create
+          name: Load DB
+          command: bundle exec rake db:schema:load
+          environment:
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name"
 
+      # run tests!
       - run:
-          name: Run tests
-          command: bin/rails test
-
-      - run:
-          name: Rubocop lint
+          name: Rubocop
           command: |
             mkdir /tmp/test-results
             bundle exec rubocop
+
+      - run:
+          name: Rake test
+          command: bundle exec rake test
+          environment:
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name"
 
       - run:
           name: YAML lint
           command: yamllint config/locales/
 
       - run:
-          name: Yarn test && CodeCov
-          command: yarn test && yarn run codecov
+          name: CodeCov
+          command: yarn run codecov
 
-      # Save artifacts
+      # collect reports
       - store_test_results:
           path: /tmp/test-results
+
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
+
+      # - run:
+      #    name: Post (pronto)
+      #    command: 'if [ -n "${CI_PULL_REQUEST}" ]; then bundle exec pronto run -f github_pr -c origin/master; fi'
