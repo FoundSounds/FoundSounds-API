@@ -23,8 +23,12 @@ RSpec.describe User, type: :model do
     it { expect(user).to validate_uniqueness_of(:email).case_insensitive }
 
     it { expect(user).to allow_value(attributes[:username]).for(:username) }
+    pending "username cannot be blank"
+    pending "username must be unique"
+    it { expect(user).to validate_uniqueness_of(:username).case_insensitive }
 
     it { expect(user).to allow_value(attributes[:encrypted_password]).for(:password) }
+    pending "password cannot be blank"
   end
 
   describe "model associations" do

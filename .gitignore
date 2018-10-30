@@ -23,3 +23,5 @@
 /config/master.key
 
 /node_modules/*
+/coverage
+/.env
