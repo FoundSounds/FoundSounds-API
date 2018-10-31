@@ -37,14 +37,12 @@ jobs:
           command: |
             sudo apt-get install cmake python-pip yamllint python3-pkg-resources
             gem install bundler
-            yarn
             bundle install --jobs=4 --retry=3 --path vendor/bundle
 
       - save_cache:
           key: gem-cache-{{ arch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-            - ~/.cache/yarn
 
       # Database setup
       - run:
@@ -69,10 +67,6 @@ jobs:
       - run:
           name: YAML lint
           command: yamllint config/locales/
-
-      - run:
-          name: CodeCov
-          command: yarn run codecov
 
       # collect reports
       - store_test_results:

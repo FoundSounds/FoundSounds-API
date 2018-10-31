@@ -4,6 +4,28 @@
 require "spec_helper"
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
+
+# CodeCov
+
+require "simplecov"
+SimpleCov.start
+
+formatters = []
+
+if ENV["CODECOV_TOKEN"]
+  require "codecov"
+  formatters << SimpleCov::Formatter::Codecov
+end
+
+SimpleCov.formatters = formatters if formatters.empty?
+
+SimpleCov.start do
+  add_filter "/spec/"
+  add_filter "/test/"
+  # Codecov doesn't automatically ignore vendored files.
+  add_filter "/vendor/"
+end
+
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"

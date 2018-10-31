@@ -3,17 +3,8 @@
 codecov:
   bot: djensenius
 coverage:
-  status:
-    changes: off
-    patch:
-    project:
-      default:
-        target: auto    # Use the coverage from the base commit
-        threshold: 0    # Allow the coverage to drop by X%, and posting a success status.
-        base: auto
-        if_no_uploads: error
-        if_not_found: success
-        if_ci_failed: error
+  round: down
+  range: 50..85
 comment:
   layout: "reach, diff, flags, files"
   behavior: default
