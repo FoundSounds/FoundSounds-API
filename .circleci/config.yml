@@ -61,8 +61,8 @@ jobs:
             bundle exec rubocop
 
       - run:
-          name: Rake test
-          command: bundle exec rake test
+          name: RSpec
+          command: bundle exec rspec
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name"
 

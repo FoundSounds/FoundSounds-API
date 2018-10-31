@@ -8,4 +8,6 @@ class User < ApplicationRecord
          :trackable
 
   has_many :sounds
+
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
 end
