@@ -3,29 +3,4 @@
 require "rails_helper"
 
 RSpec.describe Sound, type: :model do
-  it "has a valid factory" do
-    expect(build(:sound)).to be_valid
-  end
-
-  let(:user) { create(:user) }
-
-  let(:attributes) do
-    {
-      description: "A test item",
-      latitude: 34.5184,
-      longitude: -108.1058
-    }
-  end
-
-  let(:sound) { Sound.create(attributes) }
-
-  describe "model validations" do
-    it { expect(sound).to allow_value(attributes[:description]).for(:description) }
-    it { expect(sound).to allow_value(attributes[:latitude]).for(:latitude) }
-    it { expect(sound).to allow_value(attributes[:longitude]).for(:longitude) }
-  end
-
-  describe "model associations" do
-    it { expect(sound).to belong_to(:user) }
-  end
 end
