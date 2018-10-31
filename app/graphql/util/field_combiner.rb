@@ -1,0 +1,12 @@
+# frozen_string_literal: true
+
+module Util
+  class FieldCombiner
+    def self.combine(query_types)
+      byebug
+      Array(query_types).inject({}) do |acc, query_type|
+        acc.merge!(query_type.fields)
+      end
+    end
+  end
+end
