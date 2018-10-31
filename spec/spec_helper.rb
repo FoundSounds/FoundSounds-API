@@ -16,23 +16,6 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 #
-require "simplecov"
-
-formatters = []
-
-if ENV["CODECOV_TOKEN"]
-  require "codecov"
-  formatters << SimpleCov::Formatter::Codecov
-end
-
-SimpleCov.formatters = formatters if formatters.empty?
-
-SimpleCov.start do
-  add_filter "/spec/"
-  add_filter "/test/"
-  # Codecov doesn't automatically ignore vendored files.
-  add_filter "/vendor/"
-end
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
