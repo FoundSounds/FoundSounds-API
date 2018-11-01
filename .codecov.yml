@@ -6,14 +6,15 @@ coverage:
   status:
     changes: off
     patch:
-    project:
+      &cov
       default:
-        target: auto    # Use the coverage from the base commit
-        threshold: 0    # Allow the coverage to drop by X%, and posting a success status.
+        target: "80%"    # Use the coverage from the base commit
+        threshold: "20%"    # Allow the coverage to drop by X%, and posting a success status.
         base: auto
         if_no_uploads: error
         if_not_found: success
         if_ci_failed: error
+    project: *cov
 comment:
   layout: "reach, diff, flags, files"
   behavior: default

@@ -10,6 +10,7 @@ module QueryTypes
 
       resolve ->(_obj, args, _ctx) { User.find_by!(id: args[:id]) }
     end
+
     field :users, types[Types::UserType], "returns all users lists" do
       resolve ->(_obj, _args, _ctx) { User.all }
     end

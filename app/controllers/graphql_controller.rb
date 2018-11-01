@@ -18,10 +18,10 @@ class GraphqlController < ApplicationController
 
 private
 
-  def handle_error(e)
-    raise e unless Rails.env.development?
+  def handle_error(err)
+    raise err unless Rails.env.development?
 
-    handle_error_in_development e
+    handle_error_in_development err
   end
 
   # Handle form data, JSON body, or a blank value
