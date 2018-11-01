@@ -8,16 +8,21 @@ class GraphqlController < ApplicationController
     context = {
       # Query context goes here, for example:
       # current_user: current_user,
+      current_user: current_user
     }
     result = FoundSoundsApiSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
   rescue StandardError => e
-    raise e unless Rails.env.development?
-
-    handle_error_in_development e
+    handle_error(e)
   end
 
 private
+
+  def handle_error(err)
+    raise err unless Rails.env.development?
+
+    handle_error_in_development err
+  end
 
   # Handle form data, JSON body, or a blank value
   def ensure_hash(ambiguous_param)
@@ -38,8 +43,8 @@ private
   end
 
   def handle_error_in_development(err)
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    logger.error err.message
+    logger.error err.backtrace.join("\n")
 
     render json: { error: { message: err.message, backtrace: err.backtrace }, data: {} }, status: 500
   end
