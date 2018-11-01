@@ -43,8 +43,8 @@ private
   end
 
   def handle_error_in_development(err)
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    logger.error err.message
+    logger.error err.backtrace.join("\n")
 
     render json: { error: { message: err.message, backtrace: err.backtrace }, data: {} }, status: 500
   end
