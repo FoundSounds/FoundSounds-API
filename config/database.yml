@@ -19,6 +19,8 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
+  username: <%= ENV.fetch("POSTGRES_USER") %>
+  host: <%= ENV.fetch("POSTGRES_HOST") %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
