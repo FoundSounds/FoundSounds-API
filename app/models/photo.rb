@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Sound < ApplicationRecord
+class Photo < ApplicationRecord
   belongs_to :user
-  has_many :photo
+  belongs_to :sound
 end
