@@ -11,7 +11,7 @@ RSpec.describe QueryTypes::UserQueryType do
       expect(subject).to have_field(:users).that_returns(types[Types::UserType])
     end
 
-    it "returns all our created todo lists" do
+    it "returns all our created users" do
       query_result = subject.fields["users"].resolve(nil, nil, nil)
 
       users.each do |user|

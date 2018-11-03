@@ -6,19 +6,26 @@ RSpec.describe Mutations::SoundMutation do
   describe "creating a new sound" do
     let!(:user) { create(:user) }
 
-    it "adds a new sound" do
+    it "does not add a new sound if not logged in" do
       args = {
         user_id: user.id,
         description: "Wow this sound!"
       }
+      ctx = { current_user: nil }
 
-      subject.fields["create_sound"].resolve(nil, args, nil)
+      subject.fields["create_sound"].resolve(nil, args, ctx)
+      expect(Sound.count).to eq(0)
+    end
+
+    it "adds a new sound if logged in" do
+      login_as(user, scope: :user)
+      args = { description: "Wow this sound!" }
+      ctx = { current_user: user }
+
+      subject.fields["create_sound"].resolve(nil, args, ctx)
       expect(Sound.count).to eq(1)
       expect(Sound.last.description).to eq("Wow this sound!")
     end
-
-    pending "cannot add sounds if not logged in"
-    pending "cannot add sound for different user"
   end
 end
 
@@ -27,18 +34,27 @@ RSpec.describe Mutations::SoundMutation do
     let!(:user) { create(:user) }
     let!(:sound) { create(:sound, user: user) }
 
-    it "updates the sound description" do
-      args = {
-        id: sound.id,
-        description: "I am sound, ROAR"
-      }
-      query_result = subject.fields["edit_sound_description"].resolve(nil, args, nil)
-
-      expect(query_result.description).to eq "I am sound, ROAR"
+    it "does not update the sound description if not logged in" do
+      args = sound_args
+      ctx = { current_user: nil }
+      query_result = subject.fields["edit_sound_description"].resolve(nil, args, ctx)
+      expect(query_result).to eq nil
     end
 
-    pending "cannot edit sounds if not logged in"
-    pending "cannot edit sound for different user"
+    it "does not update the sound description for another user" do
+      args = sound_args
+      user.id = user.id + 1
+      ctx = { current_user: user }
+      query_result = subject.fields["edit_sound_description"].resolve(nil, args, ctx)
+      expect(query_result).to eq nil
+    end
+
+    it "updates the sound description" do
+      args = sound_args
+      ctx = { current_user: user }
+      query_result = subject.fields["edit_sound_description"].resolve(nil, args, ctx)
+      expect(query_result.description).to eq "I am sound, ROAR"
+    end
   end
 end
 
@@ -47,19 +63,35 @@ RSpec.describe Mutations::SoundMutation do
     let!(:user) { create(:user) }
     let!(:sound1) { create(:sound, user: user) }
     let!(:sound2) { create(:sound, user: user) }
-    let!(:sound3) { create(:sound, user: user) }
 
-    it "delete a sound" do
-      args = {
-        id: sound1.id
-      }
-      subject.fields["delete_sound"].resolve(nil, args, nil)
-
+    it "does not delete sound if not logged in" do
+      args = { id: sound1.id }
+      ctx = { current_user: nil }
+      subject.fields["delete_sound"].resolve(nil, args, ctx)
       expect(Sound.count).to eq 2
-      expect(Sound.all).not_to include(sound1)
     end
 
-    pending "cannot delete sounds if not logged in"
-    pending "cannot delete sound for different user"
+    it "does not delete sound if not user sound" do
+      args = { id: sound1.id }
+      user.id = user.id + 1
+      ctx = { current_user: user }
+      subject.fields["delete_sound"].resolve(nil, args, ctx)
+      expect(Sound.count).to eq 2
+    end
+
+    it "deletes sound if correct user" do
+      args = { id: sound1.id }
+      ctx = { current_user: user }
+      subject.fields["delete_sound"].resolve(nil, args, ctx)
+      expect(Sound.count).to eq 1
+      expect(Sound.all).not_to include(sound1)
+    end
   end
+end
+
+def sound_args
+  {
+    id: sound.id,
+    description: "I am sound, ROAR"
+  }
 end
