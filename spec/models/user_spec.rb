@@ -32,5 +32,6 @@ RSpec.describe User, type: :model do
 
   describe "model associations" do
     it { expect(user).to have_many(:sounds) }
+    it { expect(user).to have_many(:photos) }
   end
 end
