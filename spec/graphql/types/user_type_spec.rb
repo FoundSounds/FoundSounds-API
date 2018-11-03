@@ -5,7 +5,7 @@ require "rails_helper"
 describe Types::UserType do
   types = GraphQL::Define::TypeDefiner.instance
 
-  it "has a :todo_lists that returns a ToDoList type" do
+  it "has a has an :id that is of ID type" do
     expect(subject).to have_field(:id).that_returns(!types.ID)
   end
 

@@ -3,7 +3,6 @@
 require "rails_helper"
 
 describe Types::SoundType do
-  # avail type definer in our tests
   types = GraphQL::Define::TypeDefiner.instance
 
   it "has an id type" do

@@ -13,11 +13,9 @@ RSpec.describe QueryTypes::SoundQueryType do
 
     it "returns all our created todo lists" do
       query_result = subject.fields["sounds"].resolve(nil, nil, nil)
-
       sounds.each do |sound|
         expect(query_result.to_a).to include(sound)
       end
-
       expect(query_result.count).to eq(sounds.count)
     end
   end
