@@ -12,7 +12,6 @@ RSpec.describe Mutations::SoundMutation do
         description: "Wow this sound!"
       }
       ctx = { current_user: nil }
-
       subject.fields["create_sound"].resolve(nil, args, ctx)
       expect(Sound.count).to eq(0)
     end
@@ -21,7 +20,6 @@ RSpec.describe Mutations::SoundMutation do
       login_as(user, scope: :user)
       args = { description: "Wow this sound!" }
       ctx = { current_user: user }
-
       subject.fields["create_sound"].resolve(nil, args, ctx)
       expect(Sound.count).to eq(1)
       expect(Sound.last.description).to eq("Wow this sound!")

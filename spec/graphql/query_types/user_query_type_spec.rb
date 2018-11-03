@@ -7,17 +7,15 @@ RSpec.describe QueryTypes::UserQueryType do
 
   let!(:users) { create_list(:user, 1) }
   describe "querying all users" do
-    it "has a :user that returns a UserList type" do
+    it "has a :user that returns a [UserType]" do
       expect(subject).to have_field(:users).that_returns(types[Types::UserType])
     end
 
     it "returns all our created users" do
       query_result = subject.fields["users"].resolve(nil, nil, nil)
-
       users.each do |user|
         expect(query_result.to_a).to include(user)
       end
-
       expect(query_result.count).to eq(users.count)
     end
   end
