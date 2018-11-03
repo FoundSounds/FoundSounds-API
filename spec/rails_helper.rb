@@ -93,6 +93,7 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
   # Database and factory girl setup
   config.include FactoryBot::Syntax::Methods
+  config.include Warden::Test::Helpers
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.strategy = :transaction

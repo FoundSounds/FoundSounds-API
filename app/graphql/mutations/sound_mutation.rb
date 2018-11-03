@@ -9,11 +9,10 @@ module Mutations
       argument :user_id, !types.ID
       argument :description, !types.String
 
-      resolve lambda { |_obj, args, _ctx|
-        user = User.find(args[:user_id])
-        return unless user
+      resolve lambda { |_obj, args, ctx|
+        return unless ctx[:current_user]
 
-        user.sounds.create(
+        ctx[:current_user].sounds.create(
           description: args[:description]
         )
       }
@@ -27,8 +26,10 @@ module Mutations
     field :delete_sound, Types::SoundType do
       argument :id, !types.ID
 
-      resolve lambda { |_obj, args, _ctx|
-        sound = Sound.find_by(id: args[:id])
+      resolve lambda { |_obj, args, ctx|
+        return unless ctx[:current_user]
+
+        sound = Sound.find_by(id: args[:id], user_id: ctx[:current_user].id)
         return unless sound
 
         sound.destroy
@@ -37,8 +38,10 @@ module Mutations
   end
 end
 
-def edit_sound_description(_obj, args, _ctx)
-  sound = Sound.find_by(id: args[:id])
+def edit_sound_description(_obj, args, ctx)
+  return unless ctx[:current_user]
+
+  sound = Sound.find_by(id: args[:id], user_id: ctx[:current_user].id)
   return unless sound
 
   sound.update(

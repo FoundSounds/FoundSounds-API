@@ -1,4 +1,6 @@
 # frozen_string_literal: true
 
-class ApplicationController < ActionController::API
+# TODO: Change back to ActionController::API
+class ApplicationController < ActionController::Base
+  protect_from_forgery
 end
