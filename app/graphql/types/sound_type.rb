@@ -9,5 +9,8 @@ module Types
     field :latitude, types.Float
     field :longitude, types.Float
     field :user, !UserType
+    field :photos, types[Types::PhotoType] do
+      resolve ->(obj, _args, _ctx) { obj.photos }
+    end
   end
 end

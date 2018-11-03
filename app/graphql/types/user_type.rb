@@ -11,5 +11,8 @@ module Types
     field :sounds, types[Types::SoundType] do
       resolve ->(obj, _args, _ctx) { obj.sounds }
     end
+    field :photos, types[Types::PhotoType] do
+      resolve ->(obj, _args, _ctx) { obj.photos }
+    end
   end
 end

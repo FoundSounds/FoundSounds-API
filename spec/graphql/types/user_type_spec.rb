@@ -13,7 +13,11 @@ describe Types::UserType do
     expect(subject).to have_field(:created_at).that_returns(types.String)
   end
 
-  it "has a sound types" do
+  it "has sound types" do
     expect(subject).to have_field(:sounds).that_returns(types[Types::SoundType])
+  end
+
+  it "has photo types" do
+    expect(subject).to have_field(:photos).that_returns(types[Types::PhotoType])
   end
 end

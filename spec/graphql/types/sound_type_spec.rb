@@ -12,4 +12,8 @@ describe Types::SoundType do
   it "has an user type" do
     expect(subject).to have_field(:user).that_returns(!Types::UserType)
   end
+
+  it "has a photo types" do
+    expect(subject).to have_field(:photos).that_returns(types[Types::PhotoType])
+  end
 end
