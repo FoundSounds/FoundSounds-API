@@ -17,6 +17,26 @@ describe Types::UserType do
     expect(subject).to have_field(:name).that_returns(types.String)
   end
 
+  it "has a has an :bio that is of String type" do
+    expect(subject).to have_field(:bio).that_returns(types.String)
+  end
+
+  it "has a has an :url that is of String type" do
+    expect(subject).to have_field(:url).that_returns(types.String)
+  end
+
+  it "has a has an :twitter that is of String type" do
+    expect(subject).to have_field(:twitter).that_returns(types.String)
+  end
+
+  it "has a has an :portrait that is of String type" do
+    expect(subject).to have_field(:portrait).that_returns(types.String)
+  end
+end
+
+describe Types::UserType do
+  types = GraphQL::Define::TypeDefiner.instance
+
   it "has sound types" do
     expect(subject).to have_field(:sounds).that_returns(types[Types::SoundType])
   end
