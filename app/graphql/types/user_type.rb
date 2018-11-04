@@ -9,6 +9,11 @@ module Types
     field :email, types.String
     field :created_at, types.String
     field :name, types.String
+    field :bio, types.String
+    field :url, types.String
+    field :twitter, types.String
+    field :portrait, types.String
+
     field :sounds, types[Types::SoundType] do
       resolve ->(obj, _args, _ctx) { obj.sounds }
     end
