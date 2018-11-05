@@ -24,7 +24,8 @@ RSpec.describe QueryTypes::UserQueryType do
     it "returns the queried user" do
       id = users.first.id
       args = { id: id }
-      query_result = subject.fields["user"].resolve(nil, args, nil)
+      ctx = { current_user: nil }
+      query_result = subject.fields["user"].resolve(nil, args, ctx)
       expect(query_result).to eq(users.first)
     end
   end

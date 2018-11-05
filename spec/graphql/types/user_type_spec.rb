@@ -45,3 +45,20 @@ describe Types::UserType do
     expect(subject).to have_field(:photos).that_returns(types[Types::PhotoType])
   end
 end
+
+describe Types::UserType do
+  let!(:user) { create(:user) }
+
+  it "does not show email address if not logged in" do
+    args = { id: user.id }
+    ctx = { current_user: nil }
+    expect(subject.fields["email"].resolve(user, args, ctx)).to eq(nil)
+  end
+
+  it "shows email if logged in" do
+    login_as(user, scope: :user)
+    args = { id: user.id }
+    ctx = { current_user: user }
+    expect(subject.fields["email"].resolve(user, args, ctx)).to eq(user.email)
+  end
+end
