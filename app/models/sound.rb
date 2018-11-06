@@ -2,5 +2,6 @@
 
 class Sound < ApplicationRecord
   belongs_to :user
-  has_many :photo
+  has_many :photos
+  has_many :likes
 end

@@ -27,6 +27,7 @@ RSpec.describe Sound, type: :model do
 
   describe "model associations" do
     it { expect(sound).to belong_to(:user) }
-    it { expect(sound).to have_many(:photo) }
+    it { expect(sound).to have_many(:photos) }
+    it { expect(sound).to have_many(:likes) }
   end
 end
