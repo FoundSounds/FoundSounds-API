@@ -10,12 +10,14 @@ jobs:
       - image: circleci/ruby:2.5.3-node-browsers
         environment:
           - PG_HOST=localhost
-          - PG_USER=ubuntu
+          - PG_USER=root
+          - PG_PASSWORD=password
           - RAILS_ENV=test
           - RACK_ENV=test
       - image: circleci/postgres:9.4
         environment:
-          - POSTGRES_USER=ubuntu
+          - POSTGRES_USER=root
+          - POSTGRES_PASSWORD=password
           - POSTGRES_DB=db_name
     working_directory: ~/repo
 
@@ -49,7 +51,7 @@ jobs:
           name: Load DB
           command: bundle exec rake db:schema:load
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name"
+            DATABASE_URL: "postgres://root@localhost:5432/db_name"
 
       # run tests!
       - run:
@@ -62,7 +64,7 @@ jobs:
           name: RSpec
           command: bundle exec rspec
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/db_name"
+            DATABASE_URL: "postgres://root@localhost:5432/db_name"
 
       - run:
           name: YAML lint
