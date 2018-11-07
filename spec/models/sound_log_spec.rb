@@ -4,8 +4,6 @@ require "rails_helper"
 
 def sound_log_attributes
   {
-    sound: sound,
-    user: user,
     device_type: "type",
     os: "fancyOS",
     version: "1.0",
@@ -18,20 +16,6 @@ def sound_log_attributes
   }
 end
 
-def sound_log_fields
-  [
-    "device_type",
-    "os",
-    "version",
-    "build",
-    "device_name",
-    "device_system_name",
-    "device_version",
-    "device_model",
-    "device_localized_model"
-  ]
-end
-
 RSpec.describe SoundLog, type: :model do
   it "has a valid factory" do
     expect(build(:sound_log)).to be_valid
@@ -40,12 +24,13 @@ RSpec.describe SoundLog, type: :model do
   let(:sound) { create(:sound) }
   let(:user) { sound.user }
 
-  let(:sound_log) { SoundLog.create(sound_log_attributes) }
+  let(:attr) { sound_log_attributes.merge(user: user, sound: sound) }
+  let(:sound_log) { SoundLog.create(attr) }
 
   describe "model validations" do
-    it { expect(sound_log).to allow_value(sound_log_attributes[:user]).for(:user) }
-    it { expect(sound_log).to allow_value(sound_log_attributes[:sound]).for(:sound) }
-    sound_log_fields.each do |f|
+    it { expect(sound_log).to allow_value(attr[:user]).for(:user) }
+    it { expect(sound_log).to allow_value(attr[:sound]).for(:sound) }
+    sound_log_attributes.except(:sound, :user).keys.each do |f|
       it { expect(sound_log).to allow_value(sound_log_attributes[f]).for(f) }
     end
   end

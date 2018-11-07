@@ -2,23 +2,6 @@
 
 require "rails_helper"
 
-def fields
-  [
-    "device",
-    "device_string",
-    "os",
-    "uid",
-    "version",
-    "build",
-    "device_name",
-    "device_system_name",
-    "device_version",
-    "device_model",
-    "device_localized_model",
-    "device_screen_bounds"
-  ]
-end
-
 def log_attributes
   {
     device: "device",
@@ -44,7 +27,7 @@ RSpec.describe Log, type: :model do
   let(:log) { Log.create(log_attributes) }
 
   describe "model validations" do
-    fields.each do |f|
+    log_attributes.keys.each do |f|
       it { expect(log).to allow_value(log_attributes[f]).for(f) }
     end
   end
