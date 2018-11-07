@@ -10,10 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_04_223658) do
+ActiveRecord::Schema.define(version: 2018_11_06_232332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "abuses", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "sound_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sound_id"], name: "index_abuses_on_sound_id"
+    t.index ["user_id"], name: "index_abuses_on_user_id"
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "sound_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sound_id"], name: "index_likes_on_sound_id"
+    t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
+  create_table "logs", force: :cascade do |t|
+    t.string "device"
+    t.string "device_string"
+    t.string "os"
+    t.string "uid"
+    t.string "version"
+    t.string "build"
+    t.string "device_name"
+    t.string "device_system_name"
+    t.string "device_version"
+    t.string "device_model"
+    t.string "device_localized_model"
+    t.string "device_screen_bounds"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "photos", force: :cascade do |t|
     t.string "filename"
@@ -23,6 +58,24 @@ ActiveRecord::Schema.define(version: 2018_11_04_223658) do
     t.datetime "updated_at", null: false
     t.index ["sound_id"], name: "index_photos_on_sound_id"
     t.index ["user_id"], name: "index_photos_on_user_id"
+  end
+
+  create_table "sound_logs", force: :cascade do |t|
+    t.string "device_type"
+    t.string "os"
+    t.string "version"
+    t.string "build"
+    t.string "device_name"
+    t.string "device_system_name"
+    t.string "device_version"
+    t.string "device_model"
+    t.string "device_localized_model"
+    t.bigint "user_id"
+    t.bigint "sound_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sound_id"], name: "index_sound_logs_on_sound_id"
+    t.index ["user_id"], name: "index_sound_logs_on_user_id"
   end
 
   create_table "sounds", force: :cascade do |t|
@@ -63,6 +116,15 @@ ActiveRecord::Schema.define(version: 2018_11_04_223658) do
     t.index ["user_id"], name: "index_sounds_on_user_id"
   end
 
+  create_table "user_devices", force: :cascade do |t|
+    t.string "device_key"
+    t.string "device"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_devices_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "username", default: "", null: false
@@ -87,7 +149,14 @@ ActiveRecord::Schema.define(version: 2018_11_04_223658) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "abuses", "sounds"
+  add_foreign_key "abuses", "users"
+  add_foreign_key "likes", "sounds"
+  add_foreign_key "likes", "users"
   add_foreign_key "photos", "sounds"
   add_foreign_key "photos", "users"
+  add_foreign_key "sound_logs", "sounds"
+  add_foreign_key "sound_logs", "users"
   add_foreign_key "sounds", "users"
+  add_foreign_key "user_devices", "users"
 end
