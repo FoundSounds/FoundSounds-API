@@ -34,5 +34,7 @@ RSpec.describe User, type: :model do
     it { expect(user).to have_many(:sounds) }
     it { expect(user).to have_many(:photos) }
     it { expect(user).to have_many(:likes) }
+    it { expect(user).to have_many(:user_devices) }
+    it { expect(user).to have_many(:sound_logs) }
   end
 end
