@@ -14,23 +14,8 @@ def sound_attributes
     placement_sub_thoroughfare: "Subthorough",
     placement_region: "Region", placement_inland_water: "Water", placement_ocean: "Yep",
     placement_areas_of_interest: "Mouse", abuse: false, device_name: "iPhone",
-    device_system_name: "iOS", device_version: "10.4"
+    device_system_name: "iOS", device_version: "10.4", file_name: "test.mp4"
   }
-end
-
-def sound_fields
-  [
-    "description", "longitude", "latitude",
-    "commons", "public", "finished",
-    "placement_location", "placement_name",
-    "placement_address_dictionary", "placement_iso_country_code",
-    "placement_country", "placement_postal_code",
-    "placement_administrative_area", "placement_sub_administrative_area",
-    "placement_locality", "placement_sub_locality", "placement_thoroughfare",
-    "placement_sub_thoroughfare",
-    "placement_region", "placement_inland_water", "placement_ocean",
-    "placement_areas_of_interest", "abuse", "device_name"
-  ]
 end
 
 RSpec.describe Sound, type: :model do
@@ -46,8 +31,8 @@ RSpec.describe Sound, type: :model do
 
   describe "model validations" do
     it { expect(sound).to allow_value(attr[:user]).for(:user) }
-    sound_fields.each do |f|
-      it { expect(sound).to allow_value(attr[f]).for(f) }
+    sound_attributes.keys.each do |f|
+      it { expect(sound).to allow_value(sound_attributes[f]).for(f) }
     end
   end
 

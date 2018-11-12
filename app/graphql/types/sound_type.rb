@@ -6,13 +6,14 @@ module Types
     description "A sound"
 
     field :id, !types.ID
-    field :latitude, types.Float
-    field :longitude, types.Float
+    field :latitude, !types.Float
+    field :longitude, !types.Float
     field :user, !UserType
     field :abuse, !types.Boolean
     field :plays, !types.Int
     field :public, !types.Boolean
     field :commons, !types.Boolean
+    field :file_name, !types.String
 
     string_fields.each do |str|
       field str, types.String
