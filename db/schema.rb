@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_06_232332) do
+ActiveRecord::Schema.define(version: 2018_11_12_025632) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,8 +80,8 @@ ActiveRecord::Schema.define(version: 2018_11_06_232332) do
 
   create_table "sounds", force: :cascade do |t|
     t.string "description"
-    t.float "longitude"
-    t.float "latitude"
+    t.float "longitude", default: 0.0, null: false
+    t.float "latitude", default: 0.0, null: false
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 2018_11_06_232332) do
     t.string "device_localized_model"
     t.string "device_screen_bounds"
     t.integer "plays", default: 0, null: false
+    t.string "file_name", default: "", null: false
     t.index ["public"], name: "index_sounds_on_public"
     t.index ["user_id"], name: "index_sounds_on_user_id"
   end

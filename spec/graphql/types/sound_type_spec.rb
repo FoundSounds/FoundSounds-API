@@ -18,11 +18,15 @@ describe Types::SoundType do
   end
 
   it "has latitude field" do
-    expect(subject).to have_field(:latitude).that_returns(types.Float)
+    expect(subject).to have_field(:latitude).that_returns(!types.Float)
   end
 
   it "has longitude field" do
-    expect(subject).to have_field(:longitude).that_returns(types.Float)
+    expect(subject).to have_field(:longitude).that_returns(!types.Float)
+  end
+
+  it "has file_name field" do
+    expect(subject).to have_field(:file_name).that_returns(!types.String)
   end
 
   it "has plays field" do
