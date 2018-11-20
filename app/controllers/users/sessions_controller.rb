@@ -2,7 +2,9 @@
 
 module Users
   class SessionsController < Devise::SessionsController
-    # before_action :configure_sign_in_params, only: [:create]
+    skip_forgery_protection
+    prepend_before_action :verify_mobile_token
+    respond_to :json
 
     # GET /resource/sign_in
     # def new
@@ -17,8 +19,6 @@ module Users
     # DELETE /resource/sign_out
     # def destroy
     #   super
-    # end
-
     # protected
 
     # If you have extra params to permit, append them to the sanitizer.
