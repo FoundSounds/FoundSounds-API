@@ -21,7 +21,7 @@ SOUND_USERS = {
 }
 
 SOUND_USERS.each do |email, sounds|
-  user = User.new(email: email, password: Faker::Internet.password, username: Faker::Internet.username)
+  user = User.new(email: email, password: "testing", username: Faker::Internet.username)
   sounds.each { |sound| user.sounds.build(sound) }
   user.save
 end
