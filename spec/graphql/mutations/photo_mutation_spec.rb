@@ -36,11 +36,11 @@ RSpec.describe Mutations::PhotoMutation do
     let!(:sound) { create(:sound, user: user) }
     it "adds a new photo and sound is users" do
       login_as(user, scope: :user)
-      args = { filename: "whee.jpg", sound_id: sound.id }
+      args = { file_name: "whee.jpg", sound_id: sound.id }
       ctx = { current_user: user }
       subject.fields["create_photo"].resolve(nil, args, ctx)
       expect(Photo.count).to eq(1)
-      expect(Photo.last.filename).to eq("whee.jpg")
+      expect(Photo.last.file_name).to eq("whee.jpg")
     end
   end
 end
@@ -54,7 +54,7 @@ RSpec.describe Mutations::PhotoMutation do
     it "does not update the photo if not logged in" do
       args = sound_args
       ctx = { current_user: nil }
-      query_result = subject.fields["edit_photo_filename"].resolve(nil, args, ctx)
+      query_result = subject.fields["edit_photo_file_name"].resolve(nil, args, ctx)
       expect(query_result).to eq nil
     end
 
@@ -62,15 +62,15 @@ RSpec.describe Mutations::PhotoMutation do
       args = photo_args
       ctx = { current_user: user }
       args[:id] = args[:id] + 1
-      query_result = subject.fields["edit_photo_filename"].resolve(nil, args, ctx)
+      query_result = subject.fields["edit_photo_file_name"].resolve(nil, args, ctx)
       expect(query_result).to eq nil
     end
 
     it "updates the photo" do
       args = photo_args
       ctx = { current_user: user }
-      query_result = subject.fields["edit_photo_filename"].resolve(nil, args, ctx)
-      expect(query_result.filename).to eq "beepboop.jpg"
+      query_result = subject.fields["edit_photo_file_name"].resolve(nil, args, ctx)
+      expect(query_result.file_name).to eq "beepboop.jpg"
     end
   end
 end
@@ -109,6 +109,6 @@ end
 def photo_args
   {
     id: photo.id,
-    filename: "beepboop.jpg"
+    file_name: "beepboop.jpg"
   }
 end

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :photo do
-    filename { "sound.jpg" }
+    file_name { "sound.jpg" }
     sound { create(:sound) }
     user { sound.user }
   end
