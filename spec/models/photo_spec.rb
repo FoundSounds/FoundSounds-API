@@ -12,7 +12,7 @@ RSpec.describe Photo, type: :model do
 
   let(:attributes) do
     {
-      filename: "beep.jpg",
+      file_name: "beep.jpg",
       user: user,
       sound: sound
     }
@@ -21,7 +21,7 @@ RSpec.describe Photo, type: :model do
   let(:photo) { Photo.create(attributes) }
 
   describe "model validations" do
-    it { expect(photo).to allow_value(attributes[:filename]).for(:filename) }
+    it { expect(photo).to allow_value(attributes[:file_name]).for(:file_name) }
     it { expect(photo).to allow_value(attributes[:user]).for(:user) }
     it { expect(photo).to allow_value(attributes[:sound]).for(:sound) }
   end

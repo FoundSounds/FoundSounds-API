@@ -25,3 +25,24 @@ SOUND_USERS.each do |email, sounds|
   sounds.each { |sound| user.sounds.build(sound) }
   user.save
 end
+
+user = User.find_by(email: "david@example.com");
+ActiveRecord::Base.transaction do
+  user.sounds.build(
+    "latitude": Faker::Address.latitude,
+    "longitude": Faker::Address.longitude,
+    "description": Faker::TwinPeaks.quote,
+    "commons": true,
+    "public": true,
+    "finished": true,
+    "file_name": "1160517d60c5ddf5e136f5e1612093a9.aac"
+  )
+
+  user.save!
+  sound = Sound.find_by(file_name: "1160517d60c5ddf5e136f5e1612093a9.aac")
+  sound.photos.build(
+    "file_name": "0516c896f5c36aa580f7ae17c3d610c7.jpg",
+    "user": user
+  )
+  sound.save!
+end
